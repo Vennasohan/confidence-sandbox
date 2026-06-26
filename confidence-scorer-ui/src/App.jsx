@@ -115,7 +115,9 @@ function App() {
                 language: isMlMode ? 'python' : language,
                 intentGapScore: data.confidence_score || 0,
                 timestamp: serverTimestamp(),
-                results: data.test_results ? data.test_results.slice(0, 3) : []
+                results: data.test_results ? data.test_results.slice(0, 3) : [],
+                sourceCode: sourceCode,
+                parsedIntent: data.parsed_intent || ""
               });
               loadHistory(auth.currentUser.uid);
             } catch (err) {
@@ -166,6 +168,8 @@ function App() {
                               <div>
                                   <div style={{fontWeight: 'bold'}}>{item.language?.toUpperCase()} Evaluation</div>
                                   <div style={{fontSize: '0.8rem', color: '#888'}}>{item.problemDescription?.substring(0, 50)}...</div>
+                                  {item.parsedIntent && <div style={{fontSize: '0.75rem', color: '#aaa', marginTop: '5px'}}><strong>Intent:</strong> {item.parsedIntent.substring(0, 60)}...</div>}
+                                  {item.sourceCode && <div style={{fontSize: '0.75rem', color: '#aaa', marginTop: '5px', fontFamily: 'monospace', backgroundColor: '#1a1b26', padding: '5px', borderRadius: '4px'}}><strong>Code:</strong> {item.sourceCode.substring(0, 60)}...</div>}
                               </div>
                               <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: item.intentGapScore >= 80 ? '#4CAF50' : item.intentGapScore >= 50 ? '#FFC107' : '#F44336'}}>
                                   {item.intentGapScore}
