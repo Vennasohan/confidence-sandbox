@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { auth, googleProvider, signInWithPopup, signOut, db, collection, addDoc, query, where, getDocs, orderBy, serverTimestamp } from './firebase';
+import './App.css';
 import './App.css';
 
 function App() {
@@ -12,6 +14,50 @@ function App() {
   const [sourceCode, setSourceCode] = useState("");
   const [modelBase64, setModelBase64] = useState("");
   const [modelFileName, setModelFileName] = useState("");
+
+  // Auth & History State
+  const [user, setUser] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+      if (user) {
+        loadHistory(user.uid);
+      } else {
+        setHistory([]);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const loadHistory = async (uid) => {
+    try {
+      const q = query(collection(db, "evaluations"), where("userId", "==", uid), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      const docs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setHistory(docs);
+    } catch (err) {
+      console.error("Error loading history:", err);
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleFileDrop = (e) => {
       e.preventDefault();
@@ -50,6 +96,23 @@ function App() {
           const data = await response.json();
           if (data.error) throw new Error(data.details ? `${data.error}: ${data.details}` : data.error);
           setReport(data);
+
+          // Auto-save to Firestore if user is logged in
+          if (auth.currentUser) {
+            try {
+              await addDoc(collection(db, "evaluations"), {
+                userId: auth.currentUser.uid,
+                problemDescription,
+                language: isMlMode ? 'python' : language,
+                intentGapScore: data.intent_gap_score,
+                timestamp: serverTimestamp(),
+                results: data.results.slice(0, 3)
+              });
+              loadHistory(auth.currentUser.uid);
+            } catch (err) {
+              console.error("Failed to save to history", err);
+            }
+          }
       } catch (error) {
           console.error("Evaluation failed", error);
           alert(error.message || "Failed to evaluate. Ensure the backend server is running.");
@@ -60,12 +123,50 @@ function App() {
 
   return (
     <div className="app-container">
-      <header className="header">
-        <h1>Confidence Scorer</h1>
-        <p>AI-powered pipeline to evaluate code and ML models against rigorous edge cases.</p>
+      <header className="header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <div>
+          <h1>Confidence Scorer</h1>
+          <p style={{margin: 0}}>AI-powered pipeline to evaluate code and ML models against rigorous edge cases.</p>
+        </div>
+        <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+          {user ? (
+            <>
+              <span style={{color: 'var(--text-muted)'}}>Hi, {user.displayName?.split(' ')[0]}</span>
+              <button className="btn-secondary" onClick={() => setShowHistory(true)} style={{padding: '8px 15px'}}>History</button>
+              <button className="btn-secondary" onClick={handleLogout} style={{padding: '8px 15px'}}>Log Out</button>
+            </>
+          ) : (
+            <button className="btn-primary" onClick={handleLogin} style={{padding: '8px 15px'}}>Log in with Google</button>
+          )}
+        </div>
       </header>
 
       <main className="main-content">
+
+      {showHistory && (
+          <div className="modal-backdrop" style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center'}} onClick={() => setShowHistory(false)}>
+              <div className="glass-panel" style={{width: '600px', maxHeight: '80vh', overflowY: 'auto'}} onClick={e => e.stopPropagation()}>
+                  <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '20px'}}>
+                      <h2>Your Evaluation History</h2>
+                      <button className="btn-secondary" onClick={() => setShowHistory(false)} style={{padding: '5px 10px'}}>Close</button>
+                  </div>
+                  {history.length === 0 ? <p>No history found.</p> : (
+                      history.map(item => (
+                          <div key={item.id} style={{padding: '15px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                              <div>
+                                  <div style={{fontWeight: 'bold'}}>{item.language?.toUpperCase()} Evaluation</div>
+                                  <div style={{fontSize: '0.8rem', color: '#888'}}>{item.problemDescription?.substring(0, 50)}...</div>
+                              </div>
+                              <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: item.intentGapScore >= 80 ? '#4CAF50' : item.intentGapScore >= 50 ? '#FFC107' : '#F44336'}}>
+                                  {item.intentGapScore}
+                              </div>
+                          </div>
+                      ))
+                  )}
+              </div>
+          </div>
+      )}
+
         {/* Input Panel */}
         <section className="glass-panel">
           <div className="panel-title">
