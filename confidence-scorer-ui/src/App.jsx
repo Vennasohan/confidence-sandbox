@@ -168,8 +168,8 @@ function App() {
                               <div>
                                   <div style={{fontWeight: 'bold'}}>{item.language?.toUpperCase()} Evaluation</div>
                                   <div style={{fontSize: '0.8rem', color: '#888'}}>{item.problemDescription?.substring(0, 50)}...</div>
-                                  {item.parsedIntent && <div style={{fontSize: '0.75rem', color: '#aaa', marginTop: '5px'}}><strong>Intent:</strong> {item.parsedIntent.substring(0, 60)}...</div>}
-                                  {item.sourceCode && <div style={{fontSize: '0.75rem', color: '#aaa', marginTop: '5px', fontFamily: 'monospace', backgroundColor: '#1a1b26', padding: '5px', borderRadius: '4px'}}><strong>Code:</strong> {item.sourceCode.substring(0, 60)}...</div>}
+                                  {item.parsedIntent && <div style={{fontSize: '0.85rem', color: '#aaa', marginTop: '10px', whiteSpace: 'pre-wrap', lineHeight: '1.4'}}><strong>Intent:</strong><br/>{item.parsedIntent}</div>}
+                                  {item.sourceCode && <div style={{fontSize: '0.85rem', color: '#aaa', marginTop: '10px', fontFamily: 'monospace', backgroundColor: '#000', padding: '10px', borderRadius: '6px', whiteSpace: 'pre-wrap', maxHeight: '300px', overflowY: 'auto'}}><strong>Code:</strong><br/>{item.sourceCode}</div>}
                               </div>
                               <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: item.intentGapScore >= 80 ? '#4CAF50' : item.intentGapScore >= 50 ? '#FFC107' : '#F44336'}}>
                                   {item.intentGapScore}
