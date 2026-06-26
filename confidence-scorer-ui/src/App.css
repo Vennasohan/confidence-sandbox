@@ -50,8 +50,9 @@
 }
 
 .glass-panel:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(99, 102, 241, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .panel-title {
@@ -96,7 +97,8 @@
 .input-field:focus, .textarea-field:focus, .select-field:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .select-field option {
@@ -117,12 +119,31 @@
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
 }
 
 .btn-primary:active {
   transform: translateY(1px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
 }
 
 .toggle-container {

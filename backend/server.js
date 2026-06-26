@@ -20,8 +20,10 @@ app.use(express.json({ limit: '50mb' }));
 // Rate Limiting: 5 requests per hour per IP to protect the free tier from abuse
 const limiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 5,
-    message: { error: "Too many evaluations requested from this IP. Please try again in an hour." }
+    max: 15, // limit each IP to 15 requests per windowMs
+    message: { error: "Too many requests from this IP, please try again after an hour." },
+    standardHeaders: true,
+    legacyHeaders: false,
 });
 
 // Apply rate limiter specifically to the evaluate endpoint
