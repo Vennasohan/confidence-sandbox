@@ -113,9 +113,9 @@ function App() {
                 userId: auth.currentUser.uid,
                 problemDescription,
                 language: isMlMode ? 'python' : language,
-                intentGapScore: data.intent_gap_score,
+                intentGapScore: data.confidence_score || 0,
                 timestamp: serverTimestamp(),
-                results: data.results.slice(0, 3)
+                results: data.test_results ? data.test_results.slice(0, 3) : []
               });
               loadHistory(auth.currentUser.uid);
             } catch (err) {
