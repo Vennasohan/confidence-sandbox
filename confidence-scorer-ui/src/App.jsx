@@ -12,8 +12,7 @@ function App() {
   const [sourceCode, setSourceCode] = useState("");
   const [modelBase64, setModelBase64] = useState("");
   const [modelFileName, setModelFileName] = useState("");
-  const [modelBase64, setModelBase64] = useState("");
-  const [modelFileName, setModelFileName] = useState("");
+
   const handleFileDrop = (e) => {
       e.preventDefault();
       const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
