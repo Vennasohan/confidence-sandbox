@@ -1,0 +1,129 @@
+
+
+<head>
+        <title>Styled Web Page</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #333;
+    line-height: 1.6;
+}
+
+
+.header {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-family: 'Georgia', serif;
+    color: #444;
+}
+
+.header p {
+    font-style: italic;
+    color: #777;
+}
+
+.content {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.content h2 {
+    font-family: 'Courier New', monospace;
+    color: #222;
+}
+
+.content p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+
+a:link {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #6A5ACD;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+a:active {
+    color: #FF6347;
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+/* Layers with z-index */
+.layer {
+    position: relative;
+}
+
+.layer-1 {
+    z-index: 1;
+}
+
+.layer-2 {
+    z-index: 2;
+}
+</style>
+    </head>
+<body>
+    <div class="layer layer-1">
+        <header class="header">
+            <h1>Welcome to My Web Page</h1>
+            <p>A demonstration of CSS styles and properties</p>
+        </header>
+    </div>
+
+    <div class="layer layer-2">
+        <main>
+            <section class="content">
+                <h2>About CSS</h2>
+                <p>
+                    Cascading Style Sheets (CSS) allow you to style HTML elements with fonts, colors, spacing, and much more. 
+                </p>
+                <p>Here’s an example of background images, text styles, and link styling in action.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>
+            Visit: <a href="https://www.example.com" target="_blank">My Website</a> for more examples.
+        </p>
+    </footer>
+</body>
+</html>

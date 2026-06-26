@@ -1,0 +1,219 @@
+
+<html>
+<head>
+    
+    <title>Resume</title>
+    <style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and header styles */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.header-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 10px;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+
+section {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h2 {
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    color: #007BFF;
+}
+
+.skills-container {
+    margin-top: 10px;
+}
+
+.skill {
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 10px;
+    width: 100%;
+}
+
+.progress-bar span {
+    display: block;
+    height: 100%;
+    background-color: #007BFF;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+}
+
+.contact-info {
+    list-style: none;
+}
+
+.contact-info li {
+    margin-bottom: 10px;
+}
+
+.contact-info a {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+
+</style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="data:image/jpeg;base64,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" alt="Profile Picture" class="profile-pic">
+            <h1>K.vamsi</h1>
+            <p class="title">Web designer</p>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#objective">Objective</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="objective">
+            <h2>Objective</h2>
+            <p>A highly motivated professional with a passion for innovation and problem-solving. 
+               Seeking to apply my technical and interpersonal skills to contribute to the success of 
+               a dynamic organization.</p>
+        </section>
+
+        <section id="education">
+            <h2>Education</h2>
+            <ul>
+                <li>Bachelor of Technology in Computer Science - NIT Warangal, 2025</li>
+                <li>High School - sasi group, 2021</li>
+            </ul>
+        </section>
+
+        <section id="experience">
+            <h2>Experience</h2>
+            <ul>
+                <li>Intern at ABC Tech - Developed responsive web applications (2024)</li>
+                <li>Volunteer at nitw NGO - Organized community tech workshops (2023)</li>
+            </ul>
+        </section>
+
+        <section id="skills">
+            <h2>Skills</h2>
+            <div class="skills-container">
+                <div class="skill">
+                    <p>HTML</p>
+                    <div class="progress-bar"><span style="width: 90%;"></span></div>
+                </div>
+                <div class="skill">
+                    <p>CSS</p>
+                    <div class="progress-bar"><span style="width: 80%;"></span></div>
+                </div>
+                <div class="skill">
+                    <p>JavaScript</p>
+                    <div class="progress-bar"><span style="width: 75%;"></span></div>
+                </div>
+            </div>
+            <table>
+                <tr>
+                    <th>Strengths</th>
+                    <th>Weaknesses</th>
+                </tr>
+                <tr>
+                    <td>Problem-solving, Teamwork</td>
+                    <td>Perfectionism, Time Management</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <ul class="contact-info">
+                <li><a href="mailto:kvamsi@gmail.com"><i class="icon-email"></i> kvamsi@gmail.com</a></li>
+                <li><a href="tel:+8765357890"><i class="icon-phone"></i> 918769387659</a></li>
+                <li><a href="https://linkedin.com/in/yourprofile" target="_blank"><i class="icon-linkedin"></i> LinkedIn</a></li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
