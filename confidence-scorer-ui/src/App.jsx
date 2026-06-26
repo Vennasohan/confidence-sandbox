@@ -40,6 +40,7 @@ function App() {
       setHistory(docs);
     } catch (err) {
       console.error("Error loading history:", err);
+      alert("History Load Error: " + err.message);
     }
   };
 
@@ -113,6 +114,7 @@ function App() {
               loadHistory(auth.currentUser.uid);
             } catch (err) {
               console.error("Failed to save to history", err);
+              alert("History Save Error: " + err.message);
             }
           }
       } catch (error) {
