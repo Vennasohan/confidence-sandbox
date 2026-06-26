@@ -48,6 +48,7 @@ function App() {
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
       console.error(err);
+      alert("Login Error: " + err.message);
     }
   };
 
@@ -56,6 +57,7 @@ function App() {
       await signOut(auth);
     } catch (err) {
       console.error(err);
+      alert("Logout Error: " + err.message);
     }
   };
 
