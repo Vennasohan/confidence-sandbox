@@ -34,9 +34,15 @@ function App() {
 
   const loadHistory = async (uid) => {
     try {
-      const q = query(collection(db, "evaluations"), where("userId", "==", uid), orderBy("timestamp", "desc"));
+      const q = query(collection(db, "evaluations"), where("userId", "==", uid));
       const querySnapshot = await getDocs(q);
       const docs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // Sort in descending order by timestamp locally to avoid Firestore Index requirements
+      docs.sort((a, b) => {
+        const timeA = a.timestamp?.seconds || 0;
+        const timeB = b.timestamp?.seconds || 0;
+        return timeB - timeA;
+      });
       setHistory(docs);
     } catch (err) {
       console.error("Error loading history:", err);
