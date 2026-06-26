@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 const port = 3000;
 
-app.use(cors());
+app.use(cors({ allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'] }));
 app.use(express.json({ limit: '50mb' }));
 
 // Simple API Key Authentication Middleware

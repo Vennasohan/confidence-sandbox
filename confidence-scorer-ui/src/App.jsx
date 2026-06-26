@@ -54,7 +54,7 @@ function App() {
           setReport(data);
       } catch (error) {
           console.error("Evaluation failed", error);
-          alert("Failed to evaluate. Ensure the backend server is running.");
+          alert(error.message || "Failed to evaluate. Ensure the backend server is running.");
       } finally {
           setLoading(false);
       }
