@@ -7,6 +7,7 @@ import path from 'path';
 import { execSync } from 'child_process';
 import os from 'os';
 import axios from 'axios';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
@@ -16,18 +17,15 @@ const port = 3000;
 app.use(cors({ allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'] }));
 app.use(express.json({ limit: '50mb' }));
 
-// Simple API Key Authentication Middleware
-app.use((req, res, next) => {
-    // For local development, if API_KEY is not set, allow all. 
-    // In production (Render), this MUST be set.
-    if (process.env.API_KEY) {
-        const providedKey = req.headers['x-api-key'];
-        if (providedKey !== process.env.API_KEY) {
-            return res.status(401).json({ error: "Unauthorized: Invalid API Key" });
-        }
-    }
-    next();
+// Rate Limiting: 5 requests per hour per IP to protect the free tier from abuse
+const limiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5,
+    message: { error: "Too many evaluations requested from this IP. Please try again in an hour." }
 });
+
+// Apply rate limiter specifically to the evaluate endpoint
+app.use('/evaluate', limiter);
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 

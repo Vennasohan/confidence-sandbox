@@ -12,8 +12,8 @@ function App() {
   const [sourceCode, setSourceCode] = useState("");
   const [modelBase64, setModelBase64] = useState("");
   const [modelFileName, setModelFileName] = useState("");
-  const [apiKey, setApiKey] = useState("");
-
+  const [modelBase64, setModelBase64] = useState("");
+  const [modelFileName, setModelFileName] = useState("");
   const handleFileDrop = (e) => {
       e.preventDefault();
       const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
@@ -36,8 +36,7 @@ function App() {
           const response = await fetch(apiUrl, {
               method: 'POST',
               headers: { 
-                  'Content-Type': 'application/json',
-                  'x-api-key': apiKey
+                  'Content-Type': 'application/json'
               },
               body: JSON.stringify({
                   is_ml_mode: isMlMode,
@@ -91,17 +90,6 @@ function App() {
             ></textarea>
           </div>
           
-          <div className="form-group" style={{marginBottom: '20px'}}>
-            <label>API Key (Required for Cloud Deployment)</label>
-            <input 
-              type="password" 
-              className="text-input"
-              value={apiKey} 
-              onChange={(e) => setApiKey(e.target.value)} 
-              placeholder="Enter your secret API Key"
-              style={{width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #444', backgroundColor: '#2a2d3d', color: '#fff'}}
-            />
-          </div>
 
           {!isMlMode ? (
             <>
