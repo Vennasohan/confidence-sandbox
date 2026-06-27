@@ -306,6 +306,9 @@ function App() {
                               <div>
                                   <div style={{fontWeight: 'bold'}}>
                                     {item.isMlMode ? '🤖 ML Model Evaluation' : `${item.language?.toUpperCase()} Code Evaluation`}
+                                    <span style={{fontWeight: 'normal', fontSize: '0.8rem', color: '#666', marginLeft: '10px'}}>
+                                      {new Date(item.createdAt).toLocaleString()}
+                                    </span>
                                   </div>
                                   <div style={{fontSize: '0.8rem', color: '#888'}}>{item.problemDescription?.substring(0, 50)}...</div>
                                   {item.parsedIntent && <div style={{fontSize: '0.85rem', color: '#aaa', marginTop: '10px', whiteSpace: 'pre-wrap', lineHeight: '1.4'}}><strong>Intent:</strong><br/>{item.parsedIntent}</div>}
