@@ -23,6 +23,7 @@ function App() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const API_BASE = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : `http://${window.location.hostname}:3000`;
   const API_URL = `${API_BASE}/api`;
@@ -183,9 +184,12 @@ function App() {
                           <label>Email</label>
                           <input type="email" required className="input-field" value={email} onChange={e => setEmail(e.target.value)} />
                       </div>
-                      <div className="form-group">
+                      <div className="form-group" style={{position: 'relative'}}>
                           <label>Password</label>
-                          <input type="password" required className="input-field" value={password} onChange={e => setPassword(e.target.value)} />
+                          <input type={showPassword ? "text" : "password"} required className="input-field" value={password} onChange={e => setPassword(e.target.value)} />
+                          <button type="button" onClick={() => setShowPassword(!showPassword)} style={{position: 'absolute', right: '10px', top: '35px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.8rem'}}>
+                            {showPassword ? 'Hide' : 'Show'}
+                          </button>
                       </div>
                       <button type="submit" className="btn-primary" style={{width: '100%', marginBottom: '10px'}}>{isRegistering ? 'Register' : 'Login'}</button>
                   </form>
