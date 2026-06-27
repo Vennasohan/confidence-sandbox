@@ -21,6 +21,9 @@ function App() {
   // Auth Modal State
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
+  const [resetToken, setResetToken] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +37,14 @@ function App() {
     if (token && savedUser) {
       setUser(JSON.parse(savedUser));
       loadHistory(token);
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get('resetToken');
+    if (tokenFromUrl) {
+      setResetToken(tokenFromUrl);
+      setIsResettingPassword(true);
+      setAuthModalOpen(true);
     }
   }, []);
 
@@ -71,6 +82,45 @@ function App() {
         loadHistory(data.token);
     } catch (err) {
         alert("Auth Error: " + err.message);
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await fetch(`${API_URL}/auth/forgot-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        alert(data.message + (data.previewUrl ? `\n\n[Dev Mode] You can view the test email here:\n${data.previewUrl}` : ""));
+        setAuthModalOpen(false);
+        setIsForgotPassword(false);
+    } catch (err) {
+        alert("Error: " + err.message);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await fetch(`${API_URL}/auth/reset-password/${resetToken}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        alert(data.message);
+        
+        window.history.replaceState({}, document.title, "/");
+        setIsResettingPassword(false);
+        setResetToken(null);
+        setPassword("");
+        setIsRegistering(false);
+    } catch (err) {
+        alert("Error: " + err.message);
     }
   };
 
@@ -186,26 +236,59 @@ function App() {
           <div className="modal-backdrop" style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center'}} onClick={() => setAuthModalOpen(false)}>
               <div className="glass-panel" style={{width: '400px'}} onClick={e => e.stopPropagation()}>
                   <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '20px'}}>
-                      <h2>{isRegistering ? 'Create Account' : 'Sign In'}</h2>
+                      <h2>{isResettingPassword ? 'Reset Password' : isForgotPassword ? 'Forgot Password' : isRegistering ? 'Create Account' : 'Sign In'}</h2>
                       <button className="btn-secondary" onClick={() => setAuthModalOpen(false)} style={{padding: '5px 10px'}}>Close</button>
                   </div>
-                  <form onSubmit={handleAuth}>
-                      <div className="form-group">
-                          <label>Email</label>
-                          <input type="email" required className="input-field" value={email} onChange={e => setEmail(e.target.value)} />
-                      </div>
-                      <div className="form-group" style={{position: 'relative'}}>
-                          <label>Password</label>
-                          <input type={showPassword ? "text" : "password"} required className="input-field" value={password} onChange={e => setPassword(e.target.value)} />
-                          <button type="button" onClick={() => setShowPassword(!showPassword)} style={{position: 'absolute', right: '10px', top: '35px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.8rem'}}>
-                            {showPassword ? 'Hide' : 'Show'}
-                          </button>
-                      </div>
-                      <button type="submit" className="btn-primary" style={{width: '100%', marginBottom: '10px'}}>{isRegistering ? 'Register' : 'Login'}</button>
-                  </form>
-                  <p style={{textAlign: 'center', cursor: 'pointer', color: 'var(--accent)'}} onClick={() => setIsRegistering(!isRegistering)}>
-                      {isRegistering ? 'Already have an account? Login' : "Don't have an account? Register"}
-                  </p>
+                  
+                  {isResettingPassword ? (
+                    <form onSubmit={handleResetPassword}>
+                        <div className="form-group" style={{position: 'relative'}}>
+                            <label>New Password</label>
+                            <input type={showPassword ? "text" : "password"} required className="input-field" value={password} onChange={e => setPassword(e.target.value)} />
+                            <button type="button" onClick={() => setShowPassword(!showPassword)} style={{position: 'absolute', right: '10px', top: '35px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.8rem'}}>
+                              {showPassword ? 'Hide' : 'Show'}
+                            </button>
+                        </div>
+                        <button type="submit" className="btn-primary" style={{width: '100%', marginBottom: '10px'}}>Update Password</button>
+                    </form>
+                  ) : isForgotPassword ? (
+                    <form onSubmit={handleForgotPassword}>
+                        <div className="form-group">
+                            <label>Email Address</label>
+                            <input type="email" required className="input-field" value={email} onChange={e => setEmail(e.target.value)} />
+                        </div>
+                        <button type="submit" className="btn-primary" style={{width: '100%', marginBottom: '10px'}}>Send Reset Link</button>
+                        <p style={{textAlign: 'center', cursor: 'pointer', color: 'var(--accent)'}} onClick={() => setIsForgotPassword(false)}>
+                            Back to Login
+                        </p>
+                    </form>
+                  ) : (
+                    <form onSubmit={handleAuth}>
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input type="email" required className="input-field" value={email} onChange={e => setEmail(e.target.value)} />
+                        </div>
+                        <div className="form-group" style={{position: 'relative'}}>
+                            <label>Password</label>
+                            <input type={showPassword ? "text" : "password"} required className="input-field" value={password} onChange={e => setPassword(e.target.value)} />
+                            <button type="button" onClick={() => setShowPassword(!showPassword)} style={{position: 'absolute', right: '10px', top: '35px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.8rem'}}>
+                              {showPassword ? 'Hide' : 'Show'}
+                            </button>
+                            {!isRegistering && (
+                                <div style={{textAlign: 'right', marginTop: '5px'}}>
+                                    <span style={{fontSize: '0.85rem', color: 'var(--primary)', cursor: 'pointer'}} onClick={() => setIsForgotPassword(true)}>Forgot Password?</span>
+                                </div>
+                            )}
+                        </div>
+                        <button type="submit" className="btn-primary" style={{width: '100%', marginBottom: '10px'}}>{isRegistering ? 'Register' : 'Login'}</button>
+                    </form>
+                  )}
+                  
+                  {!isForgotPassword && !isResettingPassword && (
+                    <p style={{textAlign: 'center', cursor: 'pointer', color: 'var(--accent)'}} onClick={() => setIsRegistering(!isRegistering)}>
+                        {isRegistering ? 'Already have an account? Login' : "Don't have an account? Register"}
+                    </p>
+                  )}
               </div>
           </div>
       )}
