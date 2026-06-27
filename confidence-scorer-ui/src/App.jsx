@@ -311,13 +311,13 @@ function App() {
              </>
           )}
           
-          <button className="btn-primary" onClick={handleEvaluate} disabled={loading}>
+          <button className="btn-primary" onClick={handleEvaluate} disabled={loading} style={{marginTop: 'auto'}}>
             {loading ? 'Evaluating via AI...' : 'Generate Confidence Score'}
           </button>
         </section>
 
         {/* Results Panel */}
-        <section className="glass-panel" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+        <section className="glass-panel">
           <div className="panel-title">Confidence Report</div>
           
           {loading ? (
