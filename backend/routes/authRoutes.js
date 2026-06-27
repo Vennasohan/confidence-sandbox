@@ -6,10 +6,6 @@ import User from '../models/User.js';
 import mongoose from 'mongoose';
 
 router.post('/register', async (req, res) => {
-    if (mongoose.connection.readyState !== 1) {
-        let maskedUri = process.env.MONGO_URI ? process.env.MONGO_URI.replace(/:([^:@]+)@/, ':***@') : "UNDEFINED";
-        return res.status(500).json({ error: `CRITICAL: Backend not connected to MongoDB. Render is trying to use this exact URI: [ ${maskedUri} ]. Please check for typos, spaces, or brackets!` });
-    }
     try {
         const { email, password } = req.body;
         
@@ -31,10 +27,6 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    if (mongoose.connection.readyState !== 1) {
-        let maskedUri = process.env.MONGO_URI ? process.env.MONGO_URI.replace(/:([^:@]+)@/, ':***@') : "UNDEFINED";
-        return res.status(500).json({ error: `CRITICAL: Backend not connected to MongoDB. Render is trying to use this exact URI: [ ${maskedUri} ]. Please check for typos, spaces, or brackets!` });
-    }
     try {
         const { email, password } = req.body;
 

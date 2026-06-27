@@ -31,6 +31,15 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api/auth', authRoutes);
 app.use('/api/history', historyRoutes);
 
+app.get('/api/debug-db', async (req, res) => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        res.json({ success: true, message: "Connected successfully in debug route!" });
+    } catch (err) {
+        res.json({ success: false, errorName: err.name, errorMessage: err.message, errorDetails: err });
+    }
+});
+
 // Rate Limiting: 5 requests per hour per IP to protect the free tier from abuse
 const limiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
