@@ -314,7 +314,7 @@ function App() {
         </section>
 
         {/* Results Panel */}
-        <section className="glass-panel">
+        <section className="glass-panel" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
           <div className="panel-title">Confidence Report</div>
           
           {loading ? (
