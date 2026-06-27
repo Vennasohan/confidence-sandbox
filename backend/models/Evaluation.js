@@ -29,6 +29,10 @@ const evaluationSchema = new mongoose.Schema({
     parsedIntent: {
         type: String,
         default: ""
+    },
+    isMlMode: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 

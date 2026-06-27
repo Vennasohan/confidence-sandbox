@@ -130,10 +130,11 @@ function App() {
                 body: JSON.stringify({
                     problemDescription,
                     language: isMlMode ? 'python' : language,
+                    isMlMode: isMlMode,
                     intentGapScore: data.confidence_score || 0,
                     results: data.test_results ? data.test_results.slice(0, 3) : [],
                     sourceCode: sourceCode,
-                    parsedIntent: data.parsed_intent || ""
+                    parsedIntent: data.parsed_intent ? (typeof data.parsed_intent === 'object' ? JSON.stringify(data.parsed_intent, null, 2) : data.parsed_intent) : ""
                 })
               });
               loadHistory(token);
@@ -220,10 +221,12 @@ function App() {
                       history.map(item => (
                           <div key={item._id} style={{padding: '15px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                               <div>
-                                  <div style={{fontWeight: 'bold'}}>{item.language?.toUpperCase()} Evaluation</div>
+                                  <div style={{fontWeight: 'bold'}}>
+                                    {item.isMlMode ? '🤖 ML Model Evaluation' : `${item.language?.toUpperCase()} Code Evaluation`}
+                                  </div>
                                   <div style={{fontSize: '0.8rem', color: '#888'}}>{item.problemDescription?.substring(0, 50)}...</div>
                                   {item.parsedIntent && <div style={{fontSize: '0.85rem', color: '#aaa', marginTop: '10px', whiteSpace: 'pre-wrap', lineHeight: '1.4'}}><strong>Intent:</strong><br/>{item.parsedIntent}</div>}
-                                  {item.sourceCode && <div style={{fontSize: '0.85rem', color: '#aaa', marginTop: '10px', fontFamily: 'monospace', backgroundColor: '#000', padding: '10px', borderRadius: '6px', whiteSpace: 'pre-wrap', maxHeight: '300px', overflowY: 'auto'}}><strong>Code:</strong><br/>{item.sourceCode}</div>}
+                                  {item.sourceCode && <div style={{fontSize: '0.85rem', color: '#aaa', marginTop: '10px', fontFamily: 'monospace', backgroundColor: '#000', padding: '10px', borderRadius: '6px', whiteSpace: 'pre-wrap', maxHeight: '300px', overflowY: 'auto'}}><strong>Code/Inference Script:</strong><br/>{item.sourceCode}</div>}
                               </div>
                               <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: item.intentGapScore >= 80 ? '#4CAF50' : item.intentGapScore >= 50 ? '#FFC107' : '#F44336'}}>
                                   {item.intentGapScore}
