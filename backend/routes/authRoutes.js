@@ -3,8 +3,12 @@ const router = express.Router();
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import mongoose from 'mongoose';
 
 router.post('/register', async (req, res) => {
+    if (mongoose.connection.readyState !== 1) {
+        return res.status(500).json({ error: 'CRITICAL: The backend is NOT connected to MongoDB. Please check your MONGO_URI in Render and ensure your IP is whitelisted (0.0.0.0/0).' });
+    }
     try {
         const { email, password } = req.body;
         
@@ -26,6 +30,9 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+    if (mongoose.connection.readyState !== 1) {
+        return res.status(500).json({ error: 'CRITICAL: The backend is NOT connected to MongoDB. Please check your MONGO_URI in Render and ensure your IP is whitelisted (0.0.0.0/0).' });
+    }
     try {
         const { email, password } = req.body;
 
