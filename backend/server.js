@@ -23,10 +23,8 @@ app.use(express.json({ limit: '50mb' }));
 let dbConnectionError = null;
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('MongoDB Connected Successfully'))
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected Successfully'))
   .catch(err => {
       console.error('MongoDB Connection Error:', err);
       dbConnectionError = err.message || JSON.stringify(err);
