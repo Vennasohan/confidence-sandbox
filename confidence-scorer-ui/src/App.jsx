@@ -150,6 +150,15 @@ function App() {
       }
   };
 
+  const formatError = (errorString) => {
+      if (!errorString) return "";
+      if (typeof errorString !== 'string') return String(errorString);
+      // If it's a python traceback, the actual error is usually on the last non-empty line
+      const lines = errorString.split('\n').map(l => l.trim()).filter(l => l);
+      const errorLine = lines.slice().reverse().find(line => line.includes('Error:'));
+      return errorLine ? errorLine : errorString;
+  };
+
   return (
     <div className="app-container">
       <header className="header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -348,7 +357,7 @@ function App() {
                           Expected: {test.expected}
                         </div>
                         <div style={{fontSize: '0.9rem', color: 'var(--text-muted)'}}>
-                          Actual: {test.actual || test.error}
+                          Actual: {formatError(test.actual || test.error)}
                         </div>
                       </div>
                     ))}
