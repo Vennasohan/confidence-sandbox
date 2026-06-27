@@ -8,6 +8,9 @@ import { execSync } from 'child_process';
 import os from 'os';
 import axios from 'axios';
 import rateLimit from 'express-rate-limit';
+import mongoose from 'mongoose';
+import authRoutes from './routes/authRoutes.js';
+import historyRoutes from './routes/historyRoutes.js';
 
 dotenv.config();
 
@@ -16,6 +19,17 @@ const port = 3000;
 
 app.use(cors({ allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'] }));
 app.use(express.json({ limit: '50mb' }));
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log('MongoDB Connected Successfully'))
+  .catch(err => console.error('MongoDB Connection Error:', err));
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/history', historyRoutes);
 
 // Rate Limiting: 5 requests per hour per IP to protect the free tier from abuse
 const limiter = rateLimit({
