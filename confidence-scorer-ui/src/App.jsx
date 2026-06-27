@@ -407,7 +407,7 @@ function App() {
           <div className="panel-title">Confidence Report</div>
           
           {loading ? (
-             <div className="score-display">
+             <div className="score-display" style={{height: '100%', minHeight: '300px'}}>
                 <div style={{color: 'var(--accent)', fontSize: '1.2rem'}}>Analyzing edge cases...</div>
              </div>
           ) : report ? (
