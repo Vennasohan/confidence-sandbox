@@ -20,12 +20,26 @@ const port = 3000;
 app.use(cors({ allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'] }));
 app.use(express.json({ limit: '50mb' }));
 
+let dbConnectionError = null;
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB Connected Successfully'))
-  .catch(err => console.error('MongoDB Connection Error:', err));
+  .catch(err => {
+      console.error('MongoDB Connection Error:', err);
+      dbConnectionError = err.message || JSON.stringify(err);
+  });
+
+// Routes
+app.get('/api/health', (req, res) => {
+    res.json({
+        readyState: mongoose.connection.readyState,
+        dbError: dbConnectionError,
+        uriLength: process.env.MONGO_URI ? process.env.MONGO_URI.length : 0
+    });
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
